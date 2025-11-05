@@ -104,6 +104,11 @@ fun ProfileBody() {
                 }
 
             }
+            Column(
+                modifier = Modifier.padding(top = 15.dp, start = 20.dp)
+            ) {
+                Text("sandis001532")
+            }
         }
     }
 }
