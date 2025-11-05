@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AI37A</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+</resources>
