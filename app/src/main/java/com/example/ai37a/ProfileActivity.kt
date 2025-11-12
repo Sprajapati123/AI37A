@@ -137,24 +137,43 @@ fun ProfileBody() {
                 Text("Submit")
             }
 
-            Card(
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(300.dp),
-                shape = RoundedCornerShape(5.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                elevation = CardDefaults
-                    .cardElevation(10.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Text("hello")
+                Card(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .weight(2f),
+                    shape = RoundedCornerShape(5.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    elevation = CardDefaults
+                        .cardElevation(10.dp)
+                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text("hello")
 
+                    }
+                }
+
+                Card(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .weight(1f),
+                    shape = RoundedCornerShape(5.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    elevation = CardDefaults
+                        .cardElevation(10.dp)
+                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text("hello")
+
+                    }
                 }
             }
-
-
 
         }
     }
