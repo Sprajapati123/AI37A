@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -137,43 +138,7 @@ fun ProfileBody() {
                 Text("Submit")
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Card(
-                    modifier = Modifier
-                        .height(200.dp)
-                        .weight(2f),
-                    shape = RoundedCornerShape(5.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    elevation = CardDefaults
-                        .cardElevation(10.dp)
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Text("hello")
 
-                    }
-                }
-
-                Card(
-                    modifier = Modifier
-                        .height(200.dp)
-                        .weight(1f),
-                    shape = RoundedCornerShape(5.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    elevation = CardDefaults
-                        .cardElevation(10.dp)
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Text("hello")
-
-                    }
-                }
-            }
 
         }
     }

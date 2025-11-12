@@ -12,11 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AI37A">
         <activity
+            android:name=".CardActivity"
+            android:exported="true"
+            android:label="@string/title_activity_card"
+            android:theme="@style/Theme.AI37A">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".DashboardActivity"
             android:exported="true"
             android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.AI37A" >
-
+            android:theme="@style/Theme.AI37A">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
