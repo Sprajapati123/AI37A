@@ -237,7 +237,7 @@ fun LoginBody() {
                     append(" Sign Up")
                 }
             }, modifier = Modifier.padding(horizontal = 15.dp),
-                style = TextStyle(fontSize = 17.sp)
+                style = TextStyle(fontSize = 16.sp)
                 )
         }
     }
