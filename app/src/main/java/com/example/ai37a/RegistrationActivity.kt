@@ -1,11 +1,12 @@
 package com.example.ai37a
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,21 +15,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -53,26 +53,48 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ai37a.ui.theme.AI37ATheme
 import com.example.ai37a.ui.theme.Blue
-import com.example.ai37a.ui.theme.Purple80
+import com.example.ai37a.ui.theme.Green
 import com.example.ai37a.ui.theme.PurpleGrey80
 import com.example.ai37a.ui.theme.White
+import java.util.Calendar
 
-class LoginActivity : ComponentActivity() {
+class RegistrationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LoginBody()
+            RegisterBody()
         }
     }
 }
 
 @Composable
-fun LoginBody() {
-
+fun RegisterBody(){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
+    var terms by remember { mutableStateOf(false) }
+
+
+    var selectedDate by remember { mutableStateOf("") }
+
+    val context = LocalContext.current
+
+    var calendar = Calendar.getInstance()
+
+    var year = calendar.get(Calendar.YEAR)
+    var month = calendar.get(Calendar.MONTH)
+    var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    var datePicker = DatePickerDialog(
+        context,{
+            _,y,m,d-> selectedDate = "$d/${m+1}/$y"
+
+        },year,month,day
+    )
+
+
+//    var email : String = ""
 
     Scaffold { padding ->
         Column(
@@ -83,7 +105,7 @@ fun LoginBody() {
         ) {
             Spacer(modifier = Modifier.height(60.dp))
             Text(
-                "Sign in",
+                "Sign Up",
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     color = Blue,
@@ -93,52 +115,7 @@ fun LoginBody() {
                 )
             )
 
-            Text(
-                "This is a login UI, lorem epsum this is ecommerce app here you can buy multiple products",
-                style = TextStyle(
-                    color = Color.Gray.copy(0.7f),
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(vertical = 20.dp)
-            )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-            ) {
-                SocialMediaCard(
-                    Modifier
-                        .height(60.dp)
-                        .weight(1f),
-                    R.drawable.face,
-                    "Facebook"
-                )
-
-                Spacer(modifier = Modifier.width(15.dp))
-                SocialMediaCard(
-                    Modifier
-                        .height(60.dp)
-                        .weight(1f),
-                    R.drawable.gmail,
-                    "Gmail"
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 30.dp, horizontal = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f)
-                )
-                Text("OR", modifier = Modifier.padding(horizontal = 20.dp))
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f)
-                )
-            }
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
@@ -166,9 +143,35 @@ fun LoginBody() {
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
-                value = password,
+                value = selectedDate,
                 onValueChange = { data ->
-                    password = data
+                    selectedDate = data
+                },
+                shape = RoundedCornerShape(12.dp),
+                enabled = false,
+                modifier = Modifier
+                    .fillMaxWidth().clickable{
+                        datePicker.show()
+                    }
+                    .padding(horizontal = 15.dp),
+                placeholder = {
+                    Text("dd/mm/yyyy")
+                },
+                colors = TextFieldDefaults.colors(
+                    disabledContainerColor = PurpleGrey80,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = PurpleGrey80,
+                    unfocusedContainerColor = PurpleGrey80,
+                    focusedIndicatorColor = Blue,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = {
+                    password = it
                 },
 
                 shape = RoundedCornerShape(12.dp),
@@ -203,17 +206,22 @@ fun LoginBody() {
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    "Forget password?", style = TextStyle(
-                        color = Color.Gray.copy(0.6f)
+
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Checkbox(
+                    checked = terms,
+                    onCheckedChange = {data->
+                        terms = data
+                    },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Green,
+                        checkmarkColor = White
                     )
                 )
+                Text("I agree to terms & Conditions")
             }
 
             Button(
@@ -229,49 +237,25 @@ fun LoginBody() {
                     .fillMaxWidth().height(100.dp)
                     .padding(horizontal = 15.dp, vertical = 20.dp),
             ) {
-                Text("Log In")
+                Text("Sign Up")
             }
 
             Text(buildAnnotatedString {
-                append("Don't have an account?")
+                append("Already have an account?")
 
                 withStyle(style = SpanStyle(color = Blue)){
-                    append(" Sign Up")
+                    append(" Sign In")
                 }
             }, modifier = Modifier.padding(horizontal = 15.dp),
                 style = TextStyle(fontSize = 16.sp)
-                )
-        }
-    }
-}
-
-
-@Composable
-fun SocialMediaCard(modifier: Modifier, image: Int, label: String) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = PurpleGrey80
-        )
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(image),
-                contentDescription = null,
-                modifier = Modifier.size(30.dp)
             )
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(label)
         }
     }
+
 }
 
 @Preview
 @Composable
-fun LoginPreview() {
-    LoginBody()
+fun RegisterPreview(){
+    RegisterBody()
 }

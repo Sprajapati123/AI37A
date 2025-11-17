@@ -7,7 +7,7 @@ val Blue = Color(0xFF784DDF)
 val White = Color(0xFFFFFFFF)
 val Pink = Color(0xFFA9467B)
 val Green = Color(0xFF6EC47D)
-val PurpleGrey80 = Color(0xFFCCC2DC)
+val PurpleGrey80 = Color(0xFFE1DBEB)
 val Pink80 = Color(0xFFEFB8C8)
 
 val Purple40 = Color(0xFF6650a4)
