@@ -1,11 +1,14 @@
 package com.example.ai37a
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -74,6 +78,8 @@ fun LoginBody() {
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val activity = context as Activity
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -217,7 +223,17 @@ fun LoginBody() {
             }
 
             Button(
-                onClick = {},
+                onClick = {
+                    val intent = Intent(
+                        context, DashboardActivity::class.java
+                    )
+                    intent.putExtra("email",email)
+                    intent.putExtra("password",password)
+                    context.startActivity(intent)
+                    activity.finish()
+
+
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Blue
                 ),
@@ -226,21 +242,34 @@ fun LoginBody() {
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .fillMaxWidth().height(100.dp)
+                    .fillMaxWidth()
+                    .height(100.dp)
                     .padding(horizontal = 15.dp, vertical = 20.dp),
             ) {
                 Text("Log In")
             }
 
-            Text(buildAnnotatedString {
-                append("Don't have an account?")
+            Text(
+                buildAnnotatedString {
+                    append("Don't have an account?")
 
-                withStyle(style = SpanStyle(color = Blue)){
-                    append(" Sign Up")
-                }
-            }, modifier = Modifier.padding(horizontal = 15.dp),
+                    withStyle(style = SpanStyle(color = Blue)) {
+                        append(" Sign Up")
+                    }
+                }, modifier = Modifier
+                    .clickable{
+                        val intent = Intent(
+                            context,
+                            RegistrationActivity::class.java
+                        )
+
+                        context.startActivity(intent)
+                        activity.finish()
+
+                    }
+                    .padding(horizontal = 15.dp),
                 style = TextStyle(fontSize = 16.sp)
-                )
+            )
         }
     }
 }
