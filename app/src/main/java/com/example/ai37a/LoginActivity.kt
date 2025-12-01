@@ -264,7 +264,7 @@ fun LoginBody() {
                         )
 
                         context.startActivity(intent)
-                        activity.finish()
+//                        activity.finish()
 
                     }
                     .padding(horizontal = 15.dp),

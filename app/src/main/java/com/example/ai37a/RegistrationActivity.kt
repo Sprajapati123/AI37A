@@ -1,7 +1,9 @@
 package com.example.ai37a
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -74,11 +76,17 @@ fun RegisterBody(){
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
     var terms by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
+    val sharedPreference = context
+                .getSharedPreferences("User",
+                    Context.MODE_PRIVATE)
+
+    val editor = sharedPreference.edit()
 
     var selectedDate by remember { mutableStateOf("") }
 
-    val context = LocalContext.current
+
 
     var calendar = Calendar.getInstance()
 
@@ -225,7 +233,19 @@ fun RegisterBody(){
             }
 
             Button(
-                onClick = {},
+                onClick = {
+                   if(!terms){
+                       Toast.makeText(context,"Please agree to terms & conditions", Toast.LENGTH_SHORT).show()
+                   }else{
+                       editor.putString("email",email)
+                       editor.putString("password",password)
+                       editor.putString("date",selectedDate)
+
+                       editor.apply()
+                       Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
+                   }
+
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Blue
                 ),

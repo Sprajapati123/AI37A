@@ -25,7 +25,7 @@ class DashboardActivity : ComponentActivity() {
         }
     }
 }
-
+//mvvm with repository pattern
 @Composable
 fun DashboardBody() {
     val context = LocalContext.current
