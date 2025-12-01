@@ -1,5 +1,6 @@
 package com.example.ai37a
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -77,6 +78,7 @@ fun RegisterBody(){
     var visibility by remember { mutableStateOf(false) }
     var terms by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val activity = context as Activity
 
     val sharedPreference = context
                 .getSharedPreferences("User",
@@ -242,6 +244,8 @@ fun RegisterBody(){
                        editor.putString("date",selectedDate)
 
                        editor.apply()
+                       activity.finish()
+
                        Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
                    }
 
