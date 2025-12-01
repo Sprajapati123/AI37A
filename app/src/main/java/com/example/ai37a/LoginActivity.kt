@@ -1,8 +1,10 @@
 package com.example.ai37a
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -79,7 +81,14 @@ fun LoginBody() {
     var visibility by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context as? Activity
+
+    val sharedPreferences = context
+        .getSharedPreferences("User",
+                Context.MODE_PRIVATE)
+
+    val localEmail : String? = sharedPreferences.getString("email","")
+    val localPassword : String? = sharedPreferences.getString("password","")
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -224,13 +233,16 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-                    val intent = Intent(
-                        context, DashboardActivity::class.java
-                    )
-                    intent.putExtra("email",email)
-                    intent.putExtra("password",password)
-                    context.startActivity(intent)
-                    activity.finish()
+                  if(localEmail == email && password == localPassword){
+                      val intent = Intent(
+                          context, DashboardActivity::class.java
+                      )
+
+                      context.startActivity(intent)
+                      activity?.finish()
+                  }else{
+                      Toast.makeText(context,"Invalid login", Toast.LENGTH_SHORT).show()
+                  }
 
 
                 },
