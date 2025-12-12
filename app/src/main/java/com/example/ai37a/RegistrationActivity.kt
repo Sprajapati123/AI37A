@@ -54,11 +54,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ai37a.model.UserModel
+import com.example.ai37a.repository.UserRepoImpl
 import com.example.ai37a.ui.theme.AI37ATheme
 import com.example.ai37a.ui.theme.Blue
 import com.example.ai37a.ui.theme.Green
 import com.example.ai37a.ui.theme.PurpleGrey80
 import com.example.ai37a.ui.theme.White
+import com.example.ai37a.viewmodel.UserViewModel
 import java.util.Calendar
 
 class RegistrationActivity : ComponentActivity() {
@@ -72,7 +75,11 @@ class RegistrationActivity : ComponentActivity() {
 }
 
 @Composable
-fun RegisterBody(){
+fun RegisterBody() {
+
+    var userViewModel = remember { UserViewModel(UserRepoImpl()) }
+
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
@@ -81,13 +88,14 @@ fun RegisterBody(){
     val activity = context as Activity
 
     val sharedPreference = context
-                .getSharedPreferences("User",
-                    Context.MODE_PRIVATE)
+        .getSharedPreferences(
+            "User",
+            Context.MODE_PRIVATE
+        )
 
     val editor = sharedPreference.edit()
 
     var selectedDate by remember { mutableStateOf("") }
-
 
 
     var calendar = Calendar.getInstance()
@@ -97,10 +105,10 @@ fun RegisterBody(){
     var day = calendar.get(Calendar.DAY_OF_MONTH)
 
     var datePicker = DatePickerDialog(
-        context,{
-            _,y,m,d-> selectedDate = "$d/${m+1}/$y"
+        context, { _, y, m, d ->
+            selectedDate = "$d/${m + 1}/$y"
 
-        },year,month,day
+        }, year, month, day
     )
 
 
@@ -160,7 +168,8 @@ fun RegisterBody(){
                 shape = RoundedCornerShape(12.dp),
                 enabled = false,
                 modifier = Modifier
-                    .fillMaxWidth().clickable{
+                    .fillMaxWidth()
+                    .clickable {
                         datePicker.show()
                     }
                     .padding(horizontal = 15.dp),
@@ -217,13 +226,13 @@ fun RegisterBody(){
             Spacer(modifier = Modifier.height(20.dp))
 
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Checkbox(
                     checked = terms,
-                    onCheckedChange = {data->
+                    onCheckedChange = { data ->
                         terms = data
                     },
                     colors = CheckboxDefaults.colors(
@@ -236,18 +245,45 @@ fun RegisterBody(){
 
             Button(
                 onClick = {
-                   if(!terms){
-                       Toast.makeText(context,"Please agree to terms & conditions", Toast.LENGTH_SHORT).show()
-                   }else{
-                       editor.putString("email",email)
-                       editor.putString("password",password)
-                       editor.putString("date",selectedDate)
+                    if (!terms) {
+                        Toast.makeText(
+                            context,
+                            "Please agree to terms & conditions",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
 
-                       editor.apply()
-                       activity.finish()
+                        userViewModel.register(email, password) { success, message, userId ->
+                            if (success) {
+                                var model = UserModel(
+                                    userId = userId,
+                                    firstName = "",
+                                    lastName = "",
+                                    gender = "",
+                                    dob = selectedDate
+                                )
+                                userViewModel.addUserTODatabase(userId, model) { success, msg ->
+                                    if (success) {
+                                        activity.finish()
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
-                       Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
-                   }
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+//                       editor.putString("email",email)
+//                       editor.putString("password",password)
+//                       editor.putString("date",selectedDate)
+//
+//                       editor.apply()
+//                       activity.finish()
+//
+//                       Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
+                    }
 
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -258,19 +294,21 @@ fun RegisterBody(){
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .fillMaxWidth().height(100.dp)
+                    .fillMaxWidth()
+                    .height(100.dp)
                     .padding(horizontal = 15.dp, vertical = 20.dp),
             ) {
                 Text("Sign Up")
             }
 
-            Text(buildAnnotatedString {
-                append("Already have an account?")
+            Text(
+                buildAnnotatedString {
+                    append("Already have an account?")
 
-                withStyle(style = SpanStyle(color = Blue)){
-                    append(" Sign In")
-                }
-            }, modifier = Modifier.padding(horizontal = 15.dp),
+                    withStyle(style = SpanStyle(color = Blue)) {
+                        append(" Sign In")
+                    }
+                }, modifier = Modifier.padding(horizontal = 15.dp),
                 style = TextStyle(fontSize = 16.sp)
             )
         }
@@ -280,6 +318,6 @@ fun RegisterBody(){
 
 @Preview
 @Composable
-fun RegisterPreview(){
+fun RegisterPreview() {
     RegisterBody()
 }
