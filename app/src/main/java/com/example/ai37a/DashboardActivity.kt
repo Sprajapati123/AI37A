@@ -2,6 +2,7 @@ package com.example.ai37a
 
 import SearchScreen
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,8 +12,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -33,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.ai37a.ui.theme.AI37ATheme
 import com.example.ai37a.ui.theme.Blue
 import com.example.ai37a.ui.theme.White
+import com.example.ai37a.view.AddProductActivity
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +72,18 @@ fun DashboardBody() {
 //    val password = activity.intent.getStringExtra("password")
 
     Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                val intent = Intent(context,
+                    AddProductActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
+        },
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
