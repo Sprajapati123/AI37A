@@ -6,6 +6,7 @@ data class ProductModel(
     var price: Double = 0.0,
     var description: String = "",
     var categoryId : String = "",
+    var image : String = "",
 ){
     fun toMap() : Map<String,Any?>{
         return mapOf(
