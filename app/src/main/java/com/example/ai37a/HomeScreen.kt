@@ -1,5 +1,6 @@
 package com.example.ai37a
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -36,9 +37,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.ai37a.model.ProductModel
 import com.example.ai37a.repository.ProductRepoImpl
 import com.example.ai37a.ui.theme.Blue
 import com.example.ai37a.ui.theme.PurpleGrey80
@@ -47,15 +50,23 @@ import com.example.ai37a.viewmodel.ProductViewModel
 
 @Composable
 fun HomeScreen() {
+    val context = LocalContext.current
     val productViewModel = remember { ProductViewModel(ProductRepoImpl()) }
-
-    LaunchedEffect(Unit) {
-        productViewModel.getAllProduct()
-    }
-
     var pName by remember { mutableStateOf("") }
     var pPrice by remember { mutableStateOf("") }
     var pDesc by remember { mutableStateOf("") }
+    val product = productViewModel.products.observeAsState(initial = null)
+
+    LaunchedEffect(product.value) {
+        productViewModel.getAllProduct()
+
+        product.value?.let {
+            pName = it.name
+            pPrice = it.price.toString()
+            pDesc = it.description
+        }
+    }
+
 
     val allProducts = productViewModel.allProducts.observeAsState(initial = emptyList())
 
@@ -73,10 +84,26 @@ fun HomeScreen() {
                         showDialog = false
                     },
                     confirmButton = {
-                        TextButton(onClick = {}) { Text("Update") }
+                        TextButton(onClick = {
+                            var model = ProductModel(
+                                product.value!!.productId,
+                                pName, pPrice.toDouble(),
+                                pDesc, ""
+                            )
+                            productViewModel.updateProduct(model){
+                                success,message->
+                                if(success){
+                                    showDialog = false
+                                }else{
+                                    Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }) { Text("Update") }
                     },
                     dismissButton = {
-                        TextButton(onClick = {}) { Text("Cancel") }
+                        TextButton(onClick = {
+                            showDialog = false
+                        }) { Text("Cancel") }
                     },
                     title = { Text("Update Product") },
                     text = {
@@ -160,18 +187,24 @@ fun HomeScreen() {
         }
         items(allProducts.value!!.size) { index ->
             var data = allProducts.value!![index]
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            ) {
                 Column {
                     Text(data.name)
                     Text(data.price.toString())
                     Text(data.description)
                     IconButton(onClick = {
                         showDialog = true
+                        productViewModel.getProductById(data.productId)
                     }) {
-                        Icon(Icons.Default.Edit,
-                            contentDescription = null) }
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null
+                        )
+                    }
                     IconButton(onClick = {
                         productViewModel.deleteProduct(data.productId) { success, msg ->
                             if (success) {
