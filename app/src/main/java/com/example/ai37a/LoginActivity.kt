@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -166,7 +167,7 @@ fun LoginBody() {
                     keyboardType = KeyboardType.Email
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().testTag("email")
                     .padding(horizontal = 15.dp),
                 placeholder = {
                     Text("abc@gmail.com")
@@ -204,7 +205,7 @@ fun LoginBody() {
                     }
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().testTag("password")
                     .padding(horizontal = 15.dp),
                 placeholder = {
                     Text("*********")
@@ -254,7 +255,7 @@ fun LoginBody() {
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().testTag("login")
                     .height(100.dp)
                     .padding(horizontal = 15.dp, vertical = 20.dp),
             ) {
@@ -268,7 +269,7 @@ fun LoginBody() {
                     withStyle(style = SpanStyle(color = Blue)) {
                         append(" Sign Up")
                     }
-                }, modifier = Modifier
+                }, modifier = Modifier.testTag("register")
                     .clickable{
                         val intent = Intent(
                             context,
